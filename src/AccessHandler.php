@@ -2,20 +2,20 @@
 
 namespace LuisaeDev\Spaceship;
 
-use LuisaeDev\Spaceship\Models\SpaceshipAccess as AccessModel;
-use LuisaeDev\Spaceship\Exceptions\SpaceshipException;
 use App\Models\User;
 use Carbon\Carbon;
+use LuisaeDev\Spaceship\Exceptions\SpaceshipException;
+use LuisaeDev\Spaceship\Models\SpaceshipAccess as AccessModel;
 
-class AccessHandler extends SharedCollection {
-
+class AccessHandler extends SharedCollection
+{
     /** @param array Exposed public properties definition */
     private array $properties = ['id', 'uuid', 'user', 'punched_at'];
 
     /**
      * Constructor.
      *
-     * @param int|string $accessId Access identifier for obtain the access model
+     * @param  int|string  $accessId Access identifier for obtain the access model
      */
     public function __construct(int|string $accessId)
     {
@@ -46,17 +46,17 @@ class AccessHandler extends SharedCollection {
                 $this->addModel($model);
             } else {
                 throw new SpaceshipException('access_no_exists', [
-                    'id' => $accessId
+                    'id' => $accessId,
                 ]);
             }
         }
     }
 
-	/**
-	 * Magic __get method.
-	 */
-	public function __get(string $property)
-	{
+    /**
+     * Magic __get method.
+     */
+    public function __get(string $property)
+    {
         // Return if the model was not obtained
         if (! $this->hasModel()) {
             return null;
@@ -68,7 +68,7 @@ class AccessHandler extends SharedCollection {
         } else {
             return null;
         }
-	}
+    }
 
     /**
      * Return the role related to the current access.
@@ -115,7 +115,7 @@ class AccessHandler extends SharedCollection {
     /**
      * Check if the access and its space and role, are all activeted
      *
-     * @return boolean
+     * @return bool
      */
     public function canPass(): bool
     {
@@ -132,9 +132,9 @@ class AccessHandler extends SharedCollection {
     }
 
     /**
-     * Certify the access ownership for a specific user. 
+     * Certify the access ownership for a specific user.
      *
-     * @param User $user
+     * @param  User  $user
      * @return bool
      */
     public function isOwnershipOf(User $user): bool
@@ -144,13 +144,13 @@ class AccessHandler extends SharedCollection {
             return false;
         }
 
-        return ($user->id == $this->getModel()->user->id);
+        return $user->id == $this->getModel()->user->id;
     }
 
     /**
      * Check if the access is active.
      *
-     * @return boolean
+     * @return bool
      */
     public function isActive(): bool
     {
@@ -158,15 +158,15 @@ class AccessHandler extends SharedCollection {
         if (! $this->hasModel()) {
             return null;
         }
-        
+
         return $this->getModel()->is_active;
     }
 
     /**
      * Activate/deactivate the access.
      *
-     * @param bool $status
-     * @return boolean|null
+     * @param  bool  $status
+     * @return bool|null
      */
     public function activate(bool $status = true): ?bool
     {
@@ -192,7 +192,7 @@ class AccessHandler extends SharedCollection {
         if (! $this->hasModel()) {
             return;
         }
-        
+
         $model = $this->getModel();
         $this->forgetModel();
         $model->delete();

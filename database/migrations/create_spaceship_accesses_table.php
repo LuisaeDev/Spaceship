@@ -30,7 +30,7 @@ return new class extends Migration
 
             // Indices
             $table->unique('uuid');
-            $table->unique([ 'spaceship_space_id', 'user_id' ]);
+            $table->unique(['spaceship_space_id', 'user_id']);
         });
     }
 

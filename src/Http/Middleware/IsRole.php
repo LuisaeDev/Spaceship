@@ -2,9 +2,9 @@
 
 namespace LuisaeDev\Spaceship\Http\Middleware;
 
-use LuisaeDev\Spaceship\Facades\Spaceship;
 use Closure;
 use Illuminate\Http\Request;
+use LuisaeDev\Spaceship\Facades\Spaceship;
 
 class IsRole
 {

@@ -4,14 +4,13 @@ namespace LuisaeDev\Spaceship;
 
 use LuisaeDev\Spaceship\Contracts\SpaceshipInterface;
 use LuisaeDev\Spaceship\Http\Middleware\CanAccess;
-use LuisaeDev\Spaceship\Http\Middleware\IsRole;
 use LuisaeDev\Spaceship\Http\Middleware\ExcludeRole;
+use LuisaeDev\Spaceship\Http\Middleware\IsRole;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class SpaceshipServiceProvider extends PackageServiceProvider
 {
-
     public function configurePackage(Package $package): void
     {
         $package
@@ -26,13 +25,12 @@ class SpaceshipServiceProvider extends PackageServiceProvider
     {
 
         // Spaceship facades
-        app()->bind('spaceship', function() {
+        app()->bind('spaceship', function () {
             return new Spaceship();
         });
-        
+
         // Spaceship contracts
         app()->bind(SpaceshipInterface::class, Spaceship::class);
-        
     }
 
     public function bootingPackage()

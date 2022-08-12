@@ -2,9 +2,9 @@
 
 namespace LuisaeDev\Spaceship\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 use Ramsey\Uuid\Uuid;
 
 class SpaceshipAccess extends Model
@@ -27,7 +27,7 @@ class SpaceshipAccess extends Model
     {
         return $this->belongsTo(SpaceshipRole::class, 'spaceship_role_id');
     }
-    
+
     public static function boot()
     {
         parent::boot();
