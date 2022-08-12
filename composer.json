@@ -1,17 +1,20 @@
 {
-    "name": ":vendor_slug/:package_slug",
+    "name": "luisaedev/spaceship",
     "description": ":package_description",
     "keywords": [
-        ":vendor_name",
+        "luisaedev",
         "laravel",
-        ":package_slug"
+        "spaceship",
+        "permissions",
+        "roles"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/LuisaeDev/Spaceship",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Luis Aguilar",
+            "email": "hi@luisae.com",
+            "homepage": "https://www.luisae.com",
             "role": "Developer"
         }
     ],
@@ -35,13 +38,12 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "LuisaeDev\\Spaceship\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "LuisaeDev\\Spaceship\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -51,17 +53,21 @@
         "format": "vendor/bin/pint"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "LuisaeDev\\Spaceship\\SpaceshipServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "LuisaeDev": "LuisaeDev\\Spaceship\\Facades\\LuisaeDev"
             }
-        }
+        }                                           
     },
     "minimum-stability": "dev",
     "prefer-stable": true
