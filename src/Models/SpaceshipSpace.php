@@ -16,6 +16,7 @@ class SpaceshipSpace extends Model
     {
         return $this->hasMany(SpaceshipAccess::class);
     }
+
     public static function boot()
     {
         parent::boot();
@@ -30,14 +31,14 @@ class SpaceshipSpace extends Model
     protected function bindedData(): Attribute
     {
         return Attribute::make(
-            get: function($value) {
+            get: function ($value) {
                 if (is_string($value)) {
                     return json_decode($value, true);
                 } else {
                     return null;
                 }
             },
-            set: function($value) {
+            set: function ($value) {
                 if (is_array($value)) {
                     return json_encode($value);
                 } else {
@@ -46,5 +47,4 @@ class SpaceshipSpace extends Model
             }
         );
     }
-
 }

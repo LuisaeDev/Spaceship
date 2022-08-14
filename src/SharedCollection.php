@@ -4,8 +4,8 @@ namespace LuisaeDev\Spaceship;
 
 use Illuminate\Support\Collection;
 
-class SharedCollection {
-
+class SharedCollection
+{
     /** @param string Attribute name that is used for specify the keys at the shared collection */
     protected static $keyName = 'id';
 
@@ -18,7 +18,7 @@ class SharedCollection {
     /**
      * Add a model and set as used at the shared collection.
      *
-     * @param mixed $model
+     * @param  mixed  $model
      * @return void
      */
     protected function addModel(mixed $model): void
@@ -29,7 +29,7 @@ class SharedCollection {
     /**
      * Define wich model is used from the shared collection.
      *
-     * @param string|array $key
+     * @param  string|array  $key
      * @return void
      */
     protected function useModel(string|array $key): void
@@ -37,7 +37,7 @@ class SharedCollection {
         // If the specified key is an array, search the model for a specific attribute
         if (is_array($key)) {
             $model = self::collection()->firstWhere($key[0], $key[1]);
-        
+
         // Else, the model is obtained by its collection's key
         } else {
             $model = self::collection()->get($key);
@@ -68,7 +68,7 @@ class SharedCollection {
     /**
      * Check if there is a used model and if the model exists.
      *
-     * @return boolean
+     * @return bool
      */
     protected function hasModel(): bool
     {
@@ -78,7 +78,7 @@ class SharedCollection {
             return false;
         }
     }
-    
+
     /**
      * Forget the current used model from the shared collection, and clear the pivot key.
      *
@@ -95,27 +95,29 @@ class SharedCollection {
     /**
      * Register a model at the shared collection.
      *
-     * @param mixed $model
+     * @param  mixed  $model
      * @return mixed
      */
-    static public function registerModel(mixed $model): mixed
+    public static function registerModel(mixed $model): mixed
     {
         if (self::collection()->doesntContain($model)) {
             self::collection()->put($model->{self::$keyName}, $model);
         }
+
         return $model->{self::$keyName};
     }
-    
+
     /**
      * Return the shared collection.
      *
      * @return Collection
      */
-    static private function collection(): Collection
+    private static function collection(): Collection
     {
         if (is_null(self::$collection)) {
             self::$collection = collect();
         }
+
         return self::$collection;
     }
 }

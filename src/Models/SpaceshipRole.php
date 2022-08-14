@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SpaceshipRole extends Model
 {
     use HasFactory;
-    
+
     public $timestamps = false;
 
     protected $guarded = [];
