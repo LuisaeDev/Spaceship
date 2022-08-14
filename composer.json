@@ -44,7 +44,8 @@
     "autoload-dev": {
         "psr-4": {
             "LuisaeDev\\Spaceship\\Tests\\": "tests"
-        }
+        },
+        "files": [ "helpers.php" ]
     },
     "scripts": {
         "analyse": "vendor/bin/phpstan analyse",
