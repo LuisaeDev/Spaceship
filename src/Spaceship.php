@@ -98,7 +98,7 @@ class Spaceship implements SpaceshipInterface
     /**
      * Get a role handler instance.
      *
-     * @param int|string $roleId Role identifier for obtain the role model
+     * @param int|string $roleId Role identifier
      * @return RoleHandler
      */
     public function getRole(int|string $roleId): RoleHandler
@@ -153,7 +153,7 @@ class Spaceship implements SpaceshipInterface
     /**
      * Get an access handler instance.
      *
-     * @param int|string $accessId Access identifier for obtain the access model
+     * @param int|string $accessId Access identifier
      * @return AccessHandler
      */
     public function getAccess(int|string $accessId): AccessHandler

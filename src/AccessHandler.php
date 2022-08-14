@@ -199,7 +199,7 @@ class AccessHandler extends SharedCollection {
     }
 
     /**
-     * Set a timestamp as the last punched time.
+     * Set a timestamp as the last punching time.
      *
      * @return void
      */
