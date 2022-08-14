@@ -4,8 +4,8 @@ namespace LuisaeDev\Spaceship;
 
 use LuisaeDev\Spaceship\Contracts\SpaceshipInterface;
 use LuisaeDev\Spaceship\Http\Middleware\CanAccess;
-use LuisaeDev\Spaceship\Http\Middleware\OnlyRole;
 use LuisaeDev\Spaceship\Http\Middleware\DifferentRole;
+use LuisaeDev\Spaceship\Http\Middleware\OnlyRole;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
