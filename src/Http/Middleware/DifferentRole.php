@@ -6,7 +6,7 @@ use LuisaeDev\Spaceship\Facades\Spaceship;
 use Closure;
 use Illuminate\Http\Request;
 
-class ExcludeRole
+class DifferentRole
 {
     /**
      * Handle an incoming request.

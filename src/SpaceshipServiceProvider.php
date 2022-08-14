@@ -4,8 +4,8 @@ namespace LuisaeDev\Spaceship;
 
 use LuisaeDev\Spaceship\Contracts\SpaceshipInterface;
 use LuisaeDev\Spaceship\Http\Middleware\CanAccess;
-use LuisaeDev\Spaceship\Http\Middleware\IsRole;
-use LuisaeDev\Spaceship\Http\Middleware\ExcludeRole;
+use LuisaeDev\Spaceship\Http\Middleware\OnlyRole;
+use LuisaeDev\Spaceship\Http\Middleware\DifferentRole;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -39,7 +39,7 @@ class SpaceshipServiceProvider extends PackageServiceProvider
     {
         // Middlewares regitration
         app('router')->aliasMiddleware('can-access', CanAccess::class);
-        app('router')->aliasMiddleware('is-role', IsRole::class);
-        app('router')->aliasMiddleware('exclude-role', ExcludeRole::class);
+        app('router')->aliasMiddleware('only-role', OnlyRole::class);
+        app('router')->aliasMiddleware('diff-role', DifferentRole::class);
     }
 }
