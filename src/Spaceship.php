@@ -40,7 +40,7 @@ class Spaceship implements SpaceshipInterface
         }
 
         // Create the new space model
-        $spaceModel = new SpaceModel(array_merge([
+        $spaceModel = SpaceModel::create(array_merge([
             'name' => null,
             'alias' => null,
             'binded_id' => null,
