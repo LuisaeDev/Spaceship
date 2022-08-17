@@ -14,25 +14,21 @@ class CreateRoleCommand extends Command
 
     public function handle(): int
     {
-
-        $roleName = $this->argument('roleName');;
+        $roleName = $this->argument('roleName');
 
         try {
-
             Spaceship::createSpace($roleName);
 
             $this->comment(trans('The role ":name" has been created', [
-                'name' => $roleName
+                'name' => $roleName,
             ]));
 
             return self::SUCCESS;
-
-        } catch(SpaceshipException $e) {
-
+        } catch (SpaceshipException $e) {
             $this->error(trans('The role ":name" is already created', [
-                'name' => $roleName
+                'name' => $roleName,
             ]));
-            
+
             return self::FAILURE;
         }
     }

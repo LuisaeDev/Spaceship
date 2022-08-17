@@ -14,25 +14,21 @@ class CreateSpaceCommand extends Command
 
     public function handle(): int
     {
-
-        $spaceName = $this->argument('spaceName');;
+        $spaceName = $this->argument('spaceName');
 
         try {
-
             Spaceship::createSpace($spaceName);
 
             $this->comment(trans('The space ":name" has been created', [
-                'name' => $spaceName
+                'name' => $spaceName,
             ]));
 
             return self::SUCCESS;
-
-        } catch(SpaceshipException $e) {
-
+        } catch (SpaceshipException $e) {
             $this->error(trans('The space ":name" is already created', [
-                'name' => $spaceName
+                'name' => $spaceName,
             ]));
-            
+
             return self::FAILURE;
         }
     }
