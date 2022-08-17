@@ -28,8 +28,8 @@ class SpaceshipServiceProvider extends PackageServiceProvider
     public function registeringPackage()
     {
 
-        // Spaceship facades
-        app()->bind('spaceship', function () {
+        // Spaceship facade
+        app()->bind(Spaceship::class, function () {
             return new Spaceship();
         });
 
