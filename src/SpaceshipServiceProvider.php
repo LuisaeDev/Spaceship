@@ -18,9 +18,6 @@ class SpaceshipServiceProvider extends PackageServiceProvider
         $package
             ->name('spaceship')
             ->hasConfigFile('spaceship')
-            ->hasMigration('create_spaceship_spaces_table')
-            ->hasMigration('create_spaceship_roles_table')
-            ->hasMigration('create_spaceship_accesses_table')
             ->hasCommand(CreateSpaceCommand::class)
             ->hasCommand(CreateRoleCommand::class);
     }
@@ -39,6 +36,15 @@ class SpaceshipServiceProvider extends PackageServiceProvider
 
     public function bootingPackage()
     {
+
+        // Load and publish migrations
+        if ($this->app->runningInConsole()) {
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+            $this->publishes([
+                __DIR__.'/../database/migrations' => database_path('migrations'),
+            ], 'spaceship-migrations');
+        }
+
         // Middlewares regitration
         app('router')->aliasMiddleware('can-access', CanAccess::class);
         app('router')->aliasMiddleware('only-role', OnlyRole::class);
