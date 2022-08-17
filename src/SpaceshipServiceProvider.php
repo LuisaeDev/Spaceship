@@ -2,6 +2,8 @@
 
 namespace LuisaeDev\Spaceship;
 
+use LuisaeDev\Spaceship\Commands\CreateRoleCommand;
+use LuisaeDev\Spaceship\Commands\CreateSpaceCommand;
 use LuisaeDev\Spaceship\Contracts\SpaceshipInterface;
 use LuisaeDev\Spaceship\Http\Middleware\CanAccess;
 use LuisaeDev\Spaceship\Http\Middleware\OnlyRole;
@@ -18,7 +20,9 @@ class SpaceshipServiceProvider extends PackageServiceProvider
             ->hasConfigFile('spaceship')
             ->hasMigration('create_spaceship_spaces_table')
             ->hasMigration('create_spaceship_roles_table')
-            ->hasMigration('create_spaceship_accesses_table');
+            ->hasMigration('create_spaceship_accesses_table')
+            ->hasCommand(CreateSpaceCommand::class)
+            ->hasCommand(CreateRoleCommand::class);
     }
 
     public function registeringPackage()
