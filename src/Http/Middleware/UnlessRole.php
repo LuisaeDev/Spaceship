@@ -33,7 +33,6 @@ class UnlessRole
         $roleName = explode('|', $roleName);
 
         try {
-
             $space = Spaceship::getSpace($spaceId);
 
             // Check if the user can access to the space, and check if its role is distinct from all those specified.
@@ -42,7 +41,6 @@ class UnlessRole
             } else {
                 abort(403);
             }
-
         } catch (SpaceshipException $e) {
             abort(500);
         }

@@ -33,7 +33,6 @@ class AnyRole
         $roleName = explode('|', $roleName);
 
         try {
-
             $space = Spaceship::getSpace($spaceId);
 
             // Check if the user can access to the space, and if any role matchs with one of the specifieded
@@ -42,7 +41,6 @@ class AnyRole
             } else {
                 abort(403);
             }
-
         } catch (SpaceshipException $e) {
             abort(500);
         }

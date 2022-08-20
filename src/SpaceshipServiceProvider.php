@@ -7,8 +7,8 @@ use Illuminate\View\Compilers\BladeCompiler;
 use LuisaeDev\Spaceship\Commands\CreateRoleCommand;
 use LuisaeDev\Spaceship\Commands\CreateSpaceCommand;
 use LuisaeDev\Spaceship\Contracts\SpaceshipInterface;
-use LuisaeDev\Spaceship\Http\Middleware\CanAccess;
 use LuisaeDev\Spaceship\Http\Middleware\AnyRole;
+use LuisaeDev\Spaceship\Http\Middleware\CanAccess;
 use LuisaeDev\Spaceship\Http\Middleware\UnlessRole;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -60,42 +60,47 @@ class SpaceshipServiceProvider extends PackageServiceProvider
 
     private function registerBladeExtensions($bladeCompiler)
     {
-        $bladeCompiler->if('hasAccess', function($space) {
+        $bladeCompiler->if('hasAccess', function ($space) {
             if (! Auth::check()) {
                 return false;
             }
+
             return Auth::user()->hasAccess($space);
         });
 
-        $bladeCompiler->if('canAccess', function($space) {
+        $bladeCompiler->if('canAccess', function ($space) {
             if (! Auth::check()) {
                 return false;
             }
+
             return Auth::user()->canAccess($space);
         });
 
-        $bladeCompiler->if('canAccessAny', function(...$spaces) {
+        $bladeCompiler->if('canAccessAny', function (...$spaces) {
             if (! Auth::check()) {
                 return false;
             }
+
             return Auth::user()->canAccessAny(...$spaces);
         });
 
-        $bladeCompiler->if('canAccessAll', function(...$spaces) {
+        $bladeCompiler->if('canAccessAll', function (...$spaces) {
             if (! Auth::check()) {
                 return false;
             }
+
             return Auth::user()->canAccessAll(...$spaces);
         });
 
-        $bladeCompiler->if('unlessAccess', function(...$spaces) {
+        $bladeCompiler->if('unlessAccess', function (...$spaces) {
             if (! Auth::check()) {
                 return false;
             }
+
             return Auth::user()->unlessAccess(...$spaces);
         });
 
-        $bladeCompiler->if('hasRole', function(...$spaces) {
+        $bladeCompiler->if('hasRole', function (...$spaces) {
             if (! Auth::check()) {
                 return false;
             }
@@ -104,7 +109,7 @@ class SpaceshipServiceProvider extends PackageServiceProvider
             foreach ($spaces as $space) {
 
                 // Split the space and roles
-                list($space, $roles) = explode(':', $space);
+                [$space, $roles] = explode(':', $space);
                 $roles = explode('|', $roles);
 
                 // Obtain the access role
@@ -119,7 +124,7 @@ class SpaceshipServiceProvider extends PackageServiceProvider
             return false;
         });
 
-        $bladeCompiler->if('unlessRole', function(...$spaces) {
+        $bladeCompiler->if('unlessRole', function (...$spaces) {
             if (! Auth::check()) {
                 return false;
             }
@@ -128,7 +133,7 @@ class SpaceshipServiceProvider extends PackageServiceProvider
             foreach ($spaces as $space) {
 
                 // Split the space and roles
-                list($space, $roles) = explode(':', $space);
+                [$space, $roles] = explode(':', $space);
                 $roles = explode('|', $roles);
 
                 // Obtain the access role
@@ -149,7 +154,7 @@ class SpaceshipServiceProvider extends PackageServiceProvider
             }
 
             // Split the space and actions
-            list($space, $actions) = explode(':', $space);
+            [$space, $actions] = explode(':', $space);
             $actions = explode('|', $actions);
 
             // Obtain the access role
@@ -163,7 +168,7 @@ class SpaceshipServiceProvider extends PackageServiceProvider
             return false;
         });
 
-        $bladeCompiler->if('anyRoleCan', function(...$spaces) {
+        $bladeCompiler->if('anyRoleCan', function (...$spaces) {
             if (! Auth::check()) {
                 return false;
             }
@@ -172,7 +177,7 @@ class SpaceshipServiceProvider extends PackageServiceProvider
             foreach ($spaces as $space) {
 
                 // Split the space and actions
-                list($space, $actions) = explode(':', $space);
+                [$space, $actions] = explode(':', $space);
                 $actions = explode('|', $actions);
 
                 // Obtain the access role
@@ -187,7 +192,7 @@ class SpaceshipServiceProvider extends PackageServiceProvider
             return false;
         });
 
-        $bladeCompiler->if('allRoleCan', function(...$spaces) {
+        $bladeCompiler->if('allRoleCan', function (...$spaces) {
             if (! Auth::check()) {
                 return false;
             }
@@ -196,7 +201,7 @@ class SpaceshipServiceProvider extends PackageServiceProvider
             foreach ($spaces as $space) {
 
                 // Split the space and actions
-                list($space, $actions) = explode(':', $space);
+                [$space, $actions] = explode(':', $space);
                 $actions = explode('|', $actions);
 
                 // Obtain the access role

@@ -19,12 +19,13 @@ class SpaceHandler
 
     /** @param array Exposed get and set public properties definition */
     private array $getterProps = ['id', 'name', 'alias'];
+
     private array $setterProps = ['binded_id', 'binded_data'];
 
     /**
      * Constructor.
      *
-     * @param int|string $spaceId Space identifier
+     * @param  int|string  $spaceId Space identifier
      */
     public function __construct(int|string $spaceId)
     {
@@ -100,7 +101,7 @@ class SpaceHandler
     /**
      * Check if a specific user has access to the current space.
      *
-     * @param User $user
+     * @param  User  $user
      * @return bool
      */
     public function hasAccess(User $user): bool
@@ -125,7 +126,7 @@ class SpaceHandler
      *
      * It will validate if the space, access and role are activated.
      *
-     * @param User $user
+     * @param  User  $user
      * @return bool
      */
     public function canAccess(User $user): bool
@@ -149,7 +150,7 @@ class SpaceHandler
     /**
      * Return a user's access related to the current space.
      *
-     * @param User $user
+     * @param  User  $user
      * @return AccessHandler|null
      */
     public function getAccess(User $user): ?AccessHandler
@@ -204,7 +205,7 @@ class SpaceHandler
     /**
      * Return the corresponding user's role, related to the current space.
      *
-     * @param User $user
+     * @param  User  $user
      * @return RoleHandler|null
      */
     public function getRole(User $user): ?RoleHandler
@@ -262,8 +263,8 @@ class SpaceHandler
     /**
      * Allow access for a specific user to the current space.
      *
-     * @param User $user
-     * @param RoleHandler|string  $role
+     * @param  User  $user
+     * @param  RoleHandler|string  $role
      * @return AccessHandler|null
      */
     public function allowAccess(User $user, RoleHandler|string $role): ?AccessHandler
@@ -280,7 +281,7 @@ class SpaceHandler
     /**
      * Rovoke an user's access from the current space.
      *
-     * @param User $user
+     * @param  User  $user
      * @return void
      */
     public function revokeAccess(User $user): void
@@ -316,7 +317,7 @@ class SpaceHandler
     /**
      * Activate/deactivate the space.
      *
-     * @param bool $status
+     * @param  bool  $status
      * @return bool|null
      */
     public function activate(bool $status = true): ?bool

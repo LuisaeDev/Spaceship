@@ -18,7 +18,7 @@ trait SharedCollection
     /**
      * Add a model and set as used at the shared collection.
      *
-     * @param mixed $model
+     * @param  mixed  $model
      * @return void
      */
     private function addModel(mixed $model): void
@@ -29,7 +29,7 @@ trait SharedCollection
     /**
      * Define wich model is used from the shared collection.
      *
-     * @param mixed $key
+     * @param  mixed  $key
      * @return void
      */
     private function useModel(mixed $key): void
@@ -95,7 +95,7 @@ trait SharedCollection
     /**
      * Register a model at the shared collection.
      *
-     * @param mixed $model
+     * @param  mixed  $model
      * @return mixed Model's key value
      */
     public static function registerModel(mixed $model): mixed

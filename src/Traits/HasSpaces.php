@@ -13,7 +13,7 @@ trait HasSpaces
     /**
      * Check if the current user has access to a spacific space.
      *
-     * @param SpaceHandler|int|string $space
+     * @param  SpaceHandler|int|string  $space
      * @return bool
      */
     public function hasAccess(SpaceHandler|int|string $space): bool
@@ -34,7 +34,7 @@ trait HasSpaces
     /**
      * Check if the current user can access to a specific space.
      *
-     * @param SpaceHandler|int|string $space
+     * @param  SpaceHandler|int|string  $space
      * @return bool
      */
     public function canAccess(SpaceHandler|int|string $space): bool
@@ -55,8 +55,8 @@ trait HasSpaces
     /**
      * Check if the current user can access to any of multiple specificied spaces.
      *
-     * @param SpaceHandler|int|string ...$spaces
-     * @return boolean
+     * @param  SpaceHandler|int|string  ...$spaces
+     * @return bool
      */
     public function canAccessAny(SpaceHandler|int|string ...$spaces): bool
     {
@@ -65,14 +65,15 @@ trait HasSpaces
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      * Check if the current user can access to all of multiple specificied spaces.
      *
-     * @param SpaceHandler|int|string ...$spaces
-     * @return boolean
+     * @param  SpaceHandler|int|string  ...$spaces
+     * @return bool
      */
     public function canAccessAll(SpaceHandler|int|string ...$spaces): bool
     {
@@ -81,14 +82,15 @@ trait HasSpaces
                 return false;
             }
         }
+
         return true;
     }
 
     /**
      * Check if the current user can not access to all of multiple specificied spaces.
      *
-     * @param SpaceHandler|int|string ...$spaces
-     * @return boolean
+     * @param  SpaceHandler|int|string  ...$spaces
+     * @return bool
      */
     public function unlessAccess(SpaceHandler|int|string ...$spaces): bool
     {
@@ -97,25 +99,24 @@ trait HasSpaces
                 return false;
             }
         }
+
         return true;
     }
 
     /**
      * For the current user, return the access related to the specific space.
      *
-     * @param SpaceHandler|int|string $space
+     * @param  SpaceHandler|int|string  $space
      * @return AccessHandler|null
      */
     public function accessFrom(SpaceHandler|int|string $space): ?AccessHandler
     {
-
         try {
 
             // Define the space handler instance
             if ((is_string($space)) || (is_int($space))) {
                 $space = Spaceship::getSpace($space);
             }
-
         } catch (SpaceshipException $e) {
             return null;
         }
@@ -126,23 +127,21 @@ trait HasSpaces
     /**
      * For the current user, return the role related to the specific space.
      *
-     * @param SpaceHandler|int|string $space
+     * @param  SpaceHandler|int|string  $space
      * @return RoleHandler|null
      */
     public function roleFrom(SpaceHandler|int|string $space): ?RoleHandler
     {
-
         try {
 
             // Define the space handler instance
             if ((is_string($space)) || (is_int($space))) {
                 $space = Spaceship::getSpace($space);
             }
-
         } catch (SpaceshipException $e) {
             return null;
         }
-        
+
         return $space->getRole($this);
     }
 }

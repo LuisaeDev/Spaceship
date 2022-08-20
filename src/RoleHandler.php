@@ -12,12 +12,13 @@ class RoleHandler
 
     /** @param array Exposed get and set public properties definition */
     private array $getterProps = ['id', 'name'];
+
     private array $setterProps = [];
 
     /**
      * Constructor.
      *
-     * @param int|string $roleId Role identifier for obtain the role model
+     * @param  int|string  $roleId Role identifier for obtain the role model
      */
     public function __construct(int|string $roleId)
     {
@@ -90,7 +91,7 @@ class RoleHandler
     /**
      * Check if the current role is equal to the specified.
      *
-     * @param string $roleName Role to check
+     * @param  string  $roleName Role to check
      * @return bool|null
      */
     public function is(string $roleName): bool
@@ -110,7 +111,7 @@ class RoleHandler
     /**
      * Check if the current role is equal from any of those specified.
      *
-     * @param array $roleNames Roles to check
+     * @param  array  $roleNames Roles to check
      * @return bool|null
      */
     public function isAny(string ...$roleNames): bool
@@ -130,7 +131,7 @@ class RoleHandler
     /**
      * Check if the current role is distinct from all those specified.
      *
-     * @param array $roleNames Roles to check
+     * @param  array  $roleNames Roles to check
      * @return bool|null
      */
     public function unless(string ...$roleNames): bool
@@ -150,7 +151,7 @@ class RoleHandler
     /**
      * Check if the current role can perform some actions.
      *
-     * @param array $actions Actions to check
+     * @param  array  $actions Actions to check
      * @return bool
      */
     public function can(string ...$actions): bool
@@ -173,7 +174,7 @@ class RoleHandler
     /**
      * Return a specified parameter related to the role.
      *
-     * @param string $paramName
+     * @param  string  $paramName
      * @return mixed
      */
     public function param(string $paramName): mixed
@@ -208,7 +209,7 @@ class RoleHandler
     /**
      * Activate/deactivate the role.
      *
-     * @param bool $status
+     * @param  bool  $status
      * @return bool|null
      */
     public function activate(bool $status = true): ?bool

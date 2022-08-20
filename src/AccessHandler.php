@@ -14,12 +14,13 @@ class AccessHandler
 
     /** @param array Exposed get and set public properties definition */
     private array $getterProps = ['id', 'uuid', 'user', 'punched_at'];
+
     private array $setterProps = [];
 
     /**
      * Constructor.
      *
-     * @param int|string $accessId Access identifier for obtain the access model
+     * @param  int|string  $accessId Access identifier for obtain the access model
      */
     public function __construct(int|string $accessId)
     {
@@ -155,7 +156,7 @@ class AccessHandler
     /**
      * Certify the access ownership for a specific user.
      *
-     * @param User $user
+     * @param  User  $user
      * @return bool
      */
     public function isOwnershipOf(User $user): bool
@@ -186,7 +187,7 @@ class AccessHandler
     /**
      * Activate/deactivate the access.
      *
-     * @param bool $status
+     * @param  bool  $status
      * @return bool|null
      */
     public function activate(bool $status = true): ?bool
