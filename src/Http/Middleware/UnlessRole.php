@@ -4,9 +4,10 @@ namespace LuisaeDev\Spaceship\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use LuisaeDev\Spaceship\Exceptions\SpaceshipException;
 use LuisaeDev\Spaceship\Facades\Spaceship;
 
-class DifferentRole
+class UnlessRole
 {
     /**
      * Handle an incoming request.
@@ -26,17 +27,24 @@ class DifferentRole
         }
 
         // Obtain the corresponding space for check
-        $spaceId = config('spaceship.middleware-scope') ?? config('spaceship.default-space');
-        $space = Spaceship::getSpace($spaceId);
+        $spaceId = config('spaceship.middleware-scope');
 
         // Split the roles
-        $roleName = explode($roleName, '|');
+        $roleName = explode('|', $roleName);
 
-        // Check if the user has access to the space, and if the role doest not match with any of the specified
-        if (($space->canAccess($user)) && ($space->getRole($user)->isNot($roleName))) {
-            return $next($request);
-        } else {
-            abort(403);
+        try {
+
+            $space = Spaceship::getSpace($spaceId);
+
+            // Check if the user can access to the space, and check if its role is distinct from all those specified.
+            if (($space->canAccess($user)) && ($space->getRole($user)->unless(...$roleName))) {
+                return $next($request);
+            } else {
+                abort(403);
+            }
+
+        } catch (SpaceshipException $e) {
+            abort(500);
         }
     }
 }

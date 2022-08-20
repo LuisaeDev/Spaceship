@@ -1,13 +1,13 @@
 <?php
 
-namespace LuisaeDev\Spaceship;
+namespace LuisaeDev\Spaceship\Traits;
 
 use Illuminate\Support\Collection;
 
-class SharedCollection
+trait SharedCollection
 {
     /** @param string Attribute name that is used for specify the keys at the shared collection */
-    protected static $keyName = 'id';
+    private static $keyName = 'id';
 
     /** @param Collection Shared collection */
     private static $collection;
@@ -18,10 +18,10 @@ class SharedCollection
     /**
      * Add a model and set as used at the shared collection.
      *
-     * @param  mixed  $model
+     * @param mixed $model
      * @return void
      */
-    protected function addModel(mixed $model): void
+    private function addModel(mixed $model): void
     {
         $this->pivotKey = self::registerModel($model);
     }
@@ -29,10 +29,10 @@ class SharedCollection
     /**
      * Define wich model is used from the shared collection.
      *
-     * @param  string|array  $key
+     * @param mixed $key
      * @return void
      */
-    protected function useModel(string|array $key): void
+    private function useModel(mixed $key): void
     {
         // If the specified key is an array, search the model for a specific attribute
         if (is_array($key)) {
@@ -56,7 +56,7 @@ class SharedCollection
      *
      * @return mixed
      */
-    protected function getModel(): mixed
+    private function getModel(): mixed
     {
         if (! is_null($this->pivotKey)) {
             return self::collection()->get($this->pivotKey);
@@ -70,7 +70,7 @@ class SharedCollection
      *
      * @return bool
      */
-    protected function hasModel(): bool
+    private function hasModel(): bool
     {
         if ($this->getModel()) {
             return true;
@@ -84,7 +84,7 @@ class SharedCollection
      *
      * @return void
      */
-    protected function forgetModel(): void
+    private function forgetModel(): void
     {
         if ($this->hasModel()) {
             self::collection()->forget($this->pivotKey);
@@ -95,8 +95,8 @@ class SharedCollection
     /**
      * Register a model at the shared collection.
      *
-     * @param  mixed  $model
-     * @return mixed
+     * @param mixed $model
+     * @return mixed Model's key value
      */
     public static function registerModel(mixed $model): mixed
     {

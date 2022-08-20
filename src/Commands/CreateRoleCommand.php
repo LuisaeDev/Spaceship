@@ -17,7 +17,7 @@ class CreateRoleCommand extends Command
         $roleName = $this->argument('roleName');
 
         try {
-            Spaceship::createSpace($roleName);
+            Spaceship::createRole($roleName);
 
             $this->comment(trans('The role ":name" has been created', [
                 'name' => $roleName,

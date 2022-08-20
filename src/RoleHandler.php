@@ -4,16 +4,20 @@ namespace LuisaeDev\Spaceship;
 
 use LuisaeDev\Spaceship\Exceptions\SpaceshipException;
 use LuisaeDev\Spaceship\Models\SpaceshipRole as RoleModel;
+use LuisaeDev\Spaceship\Traits\SharedCollection;
 
-class RoleHandler extends SharedCollection
+class RoleHandler
 {
-    /** @param array Exposed public properties definition */
-    private array $properties = ['id', 'name'];
+    use SharedCollection;
+
+    /** @param array Exposed get and set public properties definition */
+    private array $getterProps = ['id', 'name'];
+    private array $setterProps = [];
 
     /**
      * Constructor.
      *
-     * @param  int|string  $roleId Role identifier for obtain the role model
+     * @param int|string $roleId Role identifier for obtain the role model
      */
     public function __construct(int|string $roleId)
     {
@@ -51,7 +55,7 @@ class RoleHandler extends SharedCollection
     /**
      * Magic __get method.
      */
-    public function __get(string $property)
+    public function __get(string $prop)
     {
         // Return if the model was not obtained
         if (! $this->hasModel()) {
@@ -59,29 +63,44 @@ class RoleHandler extends SharedCollection
         }
 
         // Return the property from the model
-        if (in_array($property, $this->properties)) {
-            return $this->getModel()->{$property};
+        if (in_array($prop, $this->getterProps)) {
+            return $this->getModel()->{$prop};
         } else {
             return null;
         }
     }
 
     /**
-     * Check if the current role is equal from any of those specified.
-     *
-     * @param  string|array  $roleName Role or roles to check
-     * @return bool
+     * Magic __set method.
      */
-    public function is(string|array $roleName): bool
+    public function __set(string $prop, mixed $value): void
     {
         // Return if the model was not obtained
         if (! $this->hasModel()) {
-            return false;
+            return;
         }
 
-        if ((is_string($roleName)) && ($this->getModel()->name == $roleName)) {
-            return true;
-        } elseif ((is_array($roleName)) && (in_array($this->getModel()->name, $roleName))) {
+        // Return the property from the model
+        if (in_array($prop, $this->setterProps)) {
+            $this->getModel()->{$prop} = $value;
+            $this->getModel()->save();
+        }
+    }
+
+    /**
+     * Check if the current role is equal to the specified.
+     *
+     * @param string $roleName Role to check
+     * @return bool|null
+     */
+    public function is(string $roleName): bool
+    {
+        // Return if the model was not obtained
+        if (! $this->hasModel()) {
+            return null;
+        }
+
+        if ($this->getModel()->name == $roleName) {
             return true;
         }
 
@@ -89,54 +108,72 @@ class RoleHandler extends SharedCollection
     }
 
     /**
-     * Check if the current role is different from any of those specified.
+     * Check if the current role is equal from any of those specified.
      *
-     * @param  string|array  $roleName Role or roles to check
-     * @return bool
+     * @param array $roleNames Roles to check
+     * @return bool|null
      */
-    public function isNot(string|array $roleName): bool
+    public function isAny(string ...$roleNames): bool
     {
         // Return if the model was not obtained
         if (! $this->hasModel()) {
-            return false;
+            return null;
         }
 
-        return ! $this->is($roleName);
+        if (in_array($this->getModel()->name, $roleNames)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * Check if the current role can perform a specified action.
+     * Check if the current role is distinct from all those specified.
      *
-     * @param  string|array  $actionName Single action or several actions to check
+     * @param array $roleNames Roles to check
+     * @return bool|null
+     */
+    public function unless(string ...$roleNames): bool
+    {
+        // Return if the model was not obtained
+        if (! $this->hasModel()) {
+            return null;
+        }
+
+        if (in_array($this->getModel()->name, $roleNames)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if the current role can perform some actions.
+     *
+     * @param array $actions Actions to check
      * @return bool
      */
-    public function can(string|array $actionName): bool
+    public function can(string ...$actions): bool
     {
         // Return if the model was not obtained
         if (! $this->hasModel()) {
             return false;
         }
 
-        // If it is a single actions to check
-        if (is_string($actionName)) {
-            return in_array($actionName, $this->permissions()['actions']);
-
-        // If they are several actions to check
-        } elseif (is_array($actionName)) {
-            foreach ($actionName as $action) {
-                if (! in_array($action, $this->permissions()['actions'])) {
-                    return false;
-                }
+        // Check every action
+        foreach ($actions as $action) {
+            if (! in_array($action, $this->permissions()['actions'])) {
+                return false;
             }
-
-            return true;
         }
+
+        return true;
     }
 
     /**
      * Return a specified parameter related to the role.
      *
-     * @param  string  $paramName
+     * @param string $paramName
      * @return mixed
      */
     public function param(string $paramName): mixed
@@ -171,7 +208,7 @@ class RoleHandler extends SharedCollection
     /**
      * Activate/deactivate the role.
      *
-     * @param  bool  $status
+     * @param bool $status
      * @return bool|null
      */
     public function activate(bool $status = true): ?bool

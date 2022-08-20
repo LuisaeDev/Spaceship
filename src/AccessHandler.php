@@ -6,16 +6,20 @@ use App\Models\User;
 use Carbon\Carbon;
 use LuisaeDev\Spaceship\Exceptions\SpaceshipException;
 use LuisaeDev\Spaceship\Models\SpaceshipAccess as AccessModel;
+use LuisaeDev\Spaceship\Traits\SharedCollection;
 
-class AccessHandler extends SharedCollection
+class AccessHandler
 {
-    /** @param array Exposed public properties definition */
-    private array $properties = ['id', 'uuid', 'user', 'punched_at'];
+    use SharedCollection;
+
+    /** @param array Exposed get and set public properties definition */
+    private array $getterProps = ['id', 'uuid', 'user', 'punched_at'];
+    private array $setterProps = [];
 
     /**
      * Constructor.
      *
-     * @param  int|string  $accessId Access identifier for obtain the access model
+     * @param int|string $accessId Access identifier for obtain the access model
      */
     public function __construct(int|string $accessId)
     {
@@ -55,7 +59,7 @@ class AccessHandler extends SharedCollection
     /**
      * Magic __get method.
      */
-    public function __get(string $property)
+    public function __get(string $prop)
     {
         // Return if the model was not obtained
         if (! $this->hasModel()) {
@@ -63,10 +67,27 @@ class AccessHandler extends SharedCollection
         }
 
         // Return the property from the model
-        if (in_array($property, $this->properties)) {
-            return $this->getModel()->{$property};
+        if (in_array($prop, $this->getterProps)) {
+            return $this->getModel()->{$prop};
         } else {
             return null;
+        }
+    }
+
+    /**
+     * Magic __set method.
+     */
+    public function __set(string $prop, mixed $value): void
+    {
+        // Return if the model was not obtained
+        if (! $this->hasModel()) {
+            return;
+        }
+
+        // Return the property from the model
+        if (in_array($prop, $this->setterProps)) {
+            $this->getModel()->{$prop} = $value;
+            $this->getModel()->save();
         }
     }
 
@@ -134,7 +155,7 @@ class AccessHandler extends SharedCollection
     /**
      * Certify the access ownership for a specific user.
      *
-     * @param  User  $user
+     * @param User $user
      * @return bool
      */
     public function isOwnershipOf(User $user): bool
@@ -165,7 +186,7 @@ class AccessHandler extends SharedCollection
     /**
      * Activate/deactivate the access.
      *
-     * @param  bool  $status
+     * @param bool $status
      * @return bool|null
      */
     public function activate(bool $status = true): ?bool

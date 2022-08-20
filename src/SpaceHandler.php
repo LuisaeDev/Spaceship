@@ -8,26 +8,26 @@ use LuisaeDev\Spaceship\Exceptions\SpaceshipException;
 use LuisaeDev\Spaceship\Facades\Spaceship as SpaceshipFacade;
 use LuisaeDev\Spaceship\Models\SpaceshipAccess as AccessModel;
 use LuisaeDev\Spaceship\Models\SpaceshipSpace as SpaceModel;
+use LuisaeDev\Spaceship\Traits\SharedCollection;
 
-class SpaceHandler extends SharedCollection
+class SpaceHandler
 {
-    /** @param User|null User model for perform further validations for this space */
-    private ?User $user = null;
+    use SharedCollection;
 
     /** @param array Property for store all AccessHandler instances obtained for the current space */
     private array $accesses = [];
 
-    /** @param array Exposed public properties definition */
-    private array $properties = ['id', 'name', 'alias'];
+    /** @param array Exposed get and set public properties definition */
+    private array $getterProps = ['id', 'name', 'alias'];
+    private array $setterProps = ['binded_id', 'binded_data'];
 
     /**
      * Constructor.
      *
-     * @param  int|string|null  $spaceId Space identifier. When null, default space will be defined
+     * @param int|string $spaceId Space identifier
      */
-    public function __construct(int|string|null $spaceId = null)
+    public function __construct(int|string $spaceId)
     {
-        $spaceId = $spaceId ?? config('spaceship.default-space');
 
         // Search the model for its 'id', 'alias' or 'name' at the shared collection
         if (is_int($spaceId)) {
@@ -45,7 +45,7 @@ class SpaceHandler extends SharedCollection
             // Search for the 'id' or 'name' column
             $query = SpaceModel::query();
             if (is_int($spaceId)) {
-                $query->where($spaceId);
+                $query->where('id', $spaceId);
             } else {
                 $query->where('name', $spaceId);
             }
@@ -65,7 +65,7 @@ class SpaceHandler extends SharedCollection
     /**
      * Magic __get method.
      */
-    public function __get(string $property)
+    public function __get(string $prop)
     {
         // Return if the model was not obtained
         if (! $this->hasModel()) {
@@ -73,41 +73,41 @@ class SpaceHandler extends SharedCollection
         }
 
         // Return the property from the model
-        if (in_array($property, $this->properties)) {
-            return $this->getModel()->{$property};
+        if (in_array($prop, $this->getterProps)) {
+            return $this->getModel()->{$prop};
         } else {
             return null;
         }
     }
 
     /**
-     * Define an user model for perform further validations for this space.
-     *
-     * @param  User  $user
-     * @return void
+     * Magic __set method.
      */
-    public function forUser(User $user)
+    public function __set(string $prop, mixed $value): void
     {
-        $this->user = $user;
+        // Return if the model was not obtained
+        if (! $this->hasModel()) {
+            return;
+        }
+
+        // Return the property from the model
+        if (in_array($prop, $this->setterProps)) {
+            $this->getModel()->{$prop} = $value;
+            $this->getModel()->save();
+        }
     }
 
     /**
      * Check if a specific user has access to the current space.
      *
-     * @param  User|null  $user
+     * @param User $user
      * @return bool
      */
-    public function hasAccess(?User $user = null): bool
+    public function hasAccess(User $user): bool
     {
         // Check if the space model was obtained
         if (! $this->hasModel()) {
             return false;
-        }
-
-        // Check if the user was specified
-        $user ??= $this->user;
-        if (! $user) {
-            throw new SpaceshipException('no_user_specified');
         }
 
         // Check if the user has an access for the current space
@@ -125,20 +125,14 @@ class SpaceHandler extends SharedCollection
      *
      * It will validate if the space, access and role are activated.
      *
-     * @param  User|null  $user
+     * @param User $user
      * @return bool
      */
-    public function canAccess(?User $user = null): bool
+    public function canAccess(User $user): bool
     {
         // Check if the space model was obtained
         if (! $this->hasModel()) {
             return false;
-        }
-
-        // Check if the user was specified
-        $user ??= $this->user;
-        if (! $user) {
-            throw new SpaceshipException('no_user_specified');
         }
 
         // Check if the user has an access for the current space
@@ -155,20 +149,14 @@ class SpaceHandler extends SharedCollection
     /**
      * Return a user's access related to the current space.
      *
-     * @param  User|null  $user
+     * @param User $user
      * @return AccessHandler|null
      */
-    public function getAccess(?User $user = null): ?AccessHandler
+    public function getAccess(User $user): ?AccessHandler
     {
         // Check if the space model was obtained
         if (! $this->hasModel()) {
-            return false;
-        }
-
-        // Check if the user was specified
-        $user ??= $this->user;
-        if (! $user) {
-            throw new SpaceshipException('no_user_specified');
+            return null;
         }
 
         // Verify if the user's access was not obtained before
@@ -216,20 +204,14 @@ class SpaceHandler extends SharedCollection
     /**
      * Return the corresponding user's role, related to the current space.
      *
-     * @param  User|null  $user
+     * @param User $user
      * @return RoleHandler|null
      */
-    public function getRole(?User $user = null): ?RoleHandler
+    public function getRole(User $user): ?RoleHandler
     {
         // Check if the space model was obtained
         if (! $this->hasModel()) {
-            return false;
-        }
-
-        // Check if the user was specified
-        $user ??= $this->user;
-        if (! $user) {
-            throw new SpaceshipException('no_user_specified');
+            return null;
         }
 
         // Check if the user has an access for the current space
@@ -247,7 +229,7 @@ class SpaceHandler extends SharedCollection
      *
      * @return mixed
      */
-    public function bindedId(): mixed
+    public function bindedId(mixed $value = null): mixed
     {
         // Check if the space model was obtained
         if (! $this->hasModel()) {
@@ -280,21 +262,15 @@ class SpaceHandler extends SharedCollection
     /**
      * Allow access for a specific user to the current space.
      *
-     * @param  RoleHandler|string  $role
-     * @param  User|null  $user
+     * @param User $user
+     * @param RoleHandler|string  $role
      * @return AccessHandler|null
      */
-    public function allowAccess(RoleHandler|string $role, ?User $user): ?AccessHandler
+    public function allowAccess(User $user, RoleHandler|string $role): ?AccessHandler
     {
         // Check if the space model was obtained
         if (! $this->hasModel()) {
             return null;
-        }
-
-        // Check if the user was specified
-        $user ??= $this->user;
-        if (! $user) {
-            throw new SpaceshipException('no_user_specified');
         }
 
         // Create and return the new access
@@ -304,20 +280,14 @@ class SpaceHandler extends SharedCollection
     /**
      * Rovoke an user's access from the current space.
      *
-     * @param  User|null  $user
+     * @param User $user
      * @return void
      */
-    public function revokeAccess(?User $user): void
+    public function revokeAccess(User $user): void
     {
         // Return if the model was not obtained
         if (! $this->hasModel()) {
             return;
-        }
-
-        // Check if the user was specified
-        $user ??= $this->user;
-        if (! $user) {
-            throw new SpaceshipException('no_user_specified');
         }
 
         // Check if the user has an access for the current space, and it will be revoked
@@ -346,7 +316,7 @@ class SpaceHandler extends SharedCollection
     /**
      * Activate/deactivate the space.
      *
-     * @param  bool  $status
+     * @param bool $status
      * @return bool|null
      */
     public function activate(bool $status = true): ?bool
@@ -377,7 +347,6 @@ class SpaceHandler extends SharedCollection
         $model = $this->getModel();
         $this->forgetModel();
         $model->delete();
-        $this->user = null;
         $this->accesses = [];
     }
 }

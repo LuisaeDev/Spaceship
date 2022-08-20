@@ -18,7 +18,7 @@ class Spaceship implements SpaceshipInterface
     /**
      * Create a new space model.
      *
-     * @param  string|array  $data Space name or attributes to add for the new space model
+     * @param string|array $data Space name or attributes to add for the new space model
      * @return SpaceHandler Corresponding space handler instance
      */
     public function createSpace(string|array $data): SpaceHandler
@@ -57,10 +57,10 @@ class Spaceship implements SpaceshipInterface
     /**
      * Get a space handler instance.
      *
-     * @param  int|string|null  $spaceId Space identifier. When null, default space will be defined
+     * @param int|string $spaceId Space identifier
      * @return SpaceHandler
      */
-    public function getSpace(int|string|null $spaceId = null): SpaceHandler
+    public function getSpace(int|string $spaceId): SpaceHandler
     {
         return new SpaceHandler($spaceId);
     }
@@ -68,7 +68,7 @@ class Spaceship implements SpaceshipInterface
     /**
      * Create a new role model.
      *
-     * @param  string  $name Unique name for the role
+     * @param string $name Unique name for the role
      * @return RoleHandler Corresponding role handler instance
      */
     public static function createRole(string $name): RoleHandler
@@ -97,7 +97,7 @@ class Spaceship implements SpaceshipInterface
     /**
      * Get a role handler instance.
      *
-     * @param  int|string  $roleId Role identifier
+     * @param int|string $roleId Role identifier
      * @return RoleHandler
      */
     public function getRole(int|string $roleId): RoleHandler
@@ -108,13 +108,18 @@ class Spaceship implements SpaceshipInterface
     /**
      * Create a new access model.
      *
-     * @param  SpaceHandler  $space
-     * @param  User  $user
-     * @param  RoleHandler|string  $role
+     * @param SpaceHandler|int|string $space
+     * @param User $user
+     * @param RoleHandler|string $role
      * @return AccessHandler Corresponding access handler instance
      */
-    public function createAccess(SpaceHandler $space, User $user, RoleHandler|string $role): AccessHandler
+    public function createAccess(SpaceHandler|int|string $space, User $user, RoleHandler|string $role): AccessHandler
     {
+
+        // Define the space handler instance
+        if ((is_string($space)) || (is_int($space))) {
+            $space = Spaceship::getSpace($space);
+        }
 
         // Check if there exists an access with the same user and space
         $access = AccessModel::query()
@@ -152,7 +157,7 @@ class Spaceship implements SpaceshipInterface
     /**
      * Get an access handler instance.
      *
-     * @param  int|string  $accessId Access identifier
+     * @param int|string $accessId Access identifier
      * @return AccessHandler
      */
     public function getAccess(int|string $accessId): AccessHandler

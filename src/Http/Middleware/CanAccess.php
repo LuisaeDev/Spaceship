@@ -15,7 +15,7 @@ class CanAccess
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, string $space = null)
+    public function handle(Request $request, Closure $next, string $space)
     {
 
         // Check if the user is authenticated
@@ -26,7 +26,6 @@ class CanAccess
         }
 
         // Check if the user can access to the space
-        $space ??= config('spaceship.default-space');
         if (! $user->canAccess($space)) {
             abort(403);
         }

@@ -13,18 +13,15 @@ trait HasSpaces
     /**
      * Check if the current user has access to a spacific space.
      *
-     * @param  SpaceHandler|string|null  $space
+     * @param SpaceHandler|int|string $space
      * @return bool
      */
-    public function hasAccess(SpaceHandler|string|null $space = null): bool
+    public function hasAccess(SpaceHandler|int|string $space): bool
     {
         try {
 
             // Define the space handler instance
-            if (is_null($space)) {
-                $space = config('spaceship.default-space');
-            }
-            if (is_string($space)) {
+            if ((is_string($space)) || (is_int($space))) {
                 $space = Spaceship::getSpace($space);
             }
 
@@ -37,18 +34,15 @@ trait HasSpaces
     /**
      * Check if the current user can access to a specific space.
      *
-     * @param  SpaceHandler|string|null  $space
+     * @param SpaceHandler|int|string $space
      * @return bool
      */
-    public function canAccess(SpaceHandler|string|null $space = null): bool
+    public function canAccess(SpaceHandler|int|string $space): bool
     {
         try {
 
             // Define the space handler instance
-            if (is_null($space)) {
-                $space = config('spaceship.default-space');
-            }
-            if (is_string($space)) {
+            if ((is_string($space)) || (is_int($space))) {
                 $space = Spaceship::getSpace($space);
             }
 
@@ -59,20 +53,71 @@ trait HasSpaces
     }
 
     /**
+     * Check if the current user can access to any of multiple specificied spaces.
+     *
+     * @param SpaceHandler|int|string ...$spaces
+     * @return boolean
+     */
+    public function canAccessAny(SpaceHandler|int|string ...$spaces): bool
+    {
+        foreach ($spaces as $space) {
+            if ($this->canAccess($space)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if the current user can access to all of multiple specificied spaces.
+     *
+     * @param SpaceHandler|int|string ...$spaces
+     * @return boolean
+     */
+    public function canAccessAll(SpaceHandler|int|string ...$spaces): bool
+    {
+        foreach ($spaces as $space) {
+            if (! $this->canAccess($space)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Check if the current user can not access to all of multiple specificied spaces.
+     *
+     * @param SpaceHandler|int|string ...$spaces
+     * @return boolean
+     */
+    public function unlessAccess(SpaceHandler|int|string ...$spaces): bool
+    {
+        foreach ($spaces as $space) {
+            if ($this->canAccess($space)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * For the current user, return the access related to the specific space.
      *
-     * @param  SpaceHandler|string|null  $space
+     * @param SpaceHandler|int|string $space
      * @return AccessHandler|null
      */
-    public function getAccess(SpaceHandler|string|null $space = null): ?AccessHandler
+    public function accessFrom(SpaceHandler|int|string $space): ?AccessHandler
     {
 
-        // Define the space handler instance
-        if (is_null($space)) {
-            $space = config('spaceship.default-space');
-        }
-        if (is_string($space)) {
-            $space = Spaceship::getSpace($space);
+        try {
+
+            // Define the space handler instance
+            if ((is_string($space)) || (is_int($space))) {
+                $space = Spaceship::getSpace($space);
+            }
+
+        } catch (SpaceshipException $e) {
+            return null;
         }
 
         return $space->getAccess($this);
@@ -81,20 +126,23 @@ trait HasSpaces
     /**
      * For the current user, return the role related to the specific space.
      *
-     * @param  SpaceHandler|string|null  $space
+     * @param SpaceHandler|int|string $space
      * @return RoleHandler|null
      */
-    public function getRole(SpaceHandler|string|null $space = null): ?RoleHandler
+    public function roleFrom(SpaceHandler|int|string $space): ?RoleHandler
     {
 
-        // Define the space handler instance
-        if (is_null($space)) {
-            $space = config('spaceship.default-space');
-        }
-        if (is_string($space)) {
-            $space = Spaceship::getSpace($space);
-        }
+        try {
 
+            // Define the space handler instance
+            if ((is_string($space)) || (is_int($space))) {
+                $space = Spaceship::getSpace($space);
+            }
+
+        } catch (SpaceshipException $e) {
+            return null;
+        }
+        
         return $space->getRole($this);
     }
 }
