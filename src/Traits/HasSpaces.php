@@ -7,9 +7,17 @@ use LuisaeDev\Spaceship\Exceptions\SpaceshipException;
 use LuisaeDev\Spaceship\Facades\Spaceship;
 use LuisaeDev\Spaceship\RoleHandler;
 use LuisaeDev\Spaceship\SpaceHandler;
+use LuisaeDev\Spaceship\Models\SpaceshipAccess;
+use Illuminate\Support\Collection;
 
 trait HasSpaces
 {
+
+    public function accesses()
+    {
+        return $this->hasMany(SpaceshipAccess::class);
+    }
+
     /**
      * Check if the current user has access to a spacific space.
      *
@@ -101,6 +109,21 @@ trait HasSpaces
         }
 
         return true;
+    }
+
+    /**
+     * Return a collection with all accesses models related to the current user.
+     *
+     * @return Collection
+     */
+    public function getAccesses(): Collection
+    {
+        // Check if the space model was obtained
+        if (! $this->hasModel()) {
+            return collect([]);
+        }
+
+        return $this->accesses->load(['space', 'role']);
     }
 
     /**

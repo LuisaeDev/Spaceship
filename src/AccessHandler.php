@@ -178,7 +178,7 @@ class AccessHandler
     {
         // Return if the model was not obtained
         if (! $this->hasModel()) {
-            return null;
+            return false;
         }
 
         return $this->getModel()->is_active;

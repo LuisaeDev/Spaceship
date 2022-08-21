@@ -2,13 +2,13 @@
 
 namespace LuisaeDev\Spaceship;
 
-use App\Models\User;
-use Illuminate\Support\Collection;
 use LuisaeDev\Spaceship\Exceptions\SpaceshipException;
 use LuisaeDev\Spaceship\Facades\Spaceship as SpaceshipFacade;
 use LuisaeDev\Spaceship\Models\SpaceshipAccess as AccessModel;
 use LuisaeDev\Spaceship\Models\SpaceshipSpace as SpaceModel;
 use LuisaeDev\Spaceship\Traits\SharedCollection;
+use App\Models\User;
+use Illuminate\Support\Collection;
 
 class SpaceHandler
 {
@@ -308,7 +308,7 @@ class SpaceHandler
     {
         // Return if the model was not obtained
         if (! $this->hasModel()) {
-            return null;
+            return false;
         }
 
         return $this->getModel()->is_active;
