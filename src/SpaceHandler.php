@@ -2,13 +2,13 @@
 
 namespace LuisaeDev\Spaceship;
 
+use App\Models\User;
+use Illuminate\Support\Collection;
 use LuisaeDev\Spaceship\Exceptions\SpaceshipException;
 use LuisaeDev\Spaceship\Facades\Spaceship as SpaceshipFacade;
 use LuisaeDev\Spaceship\Models\SpaceshipAccess as AccessModel;
 use LuisaeDev\Spaceship\Models\SpaceshipSpace as SpaceModel;
 use LuisaeDev\Spaceship\Traits\SharedCollection;
-use App\Models\User;
-use Illuminate\Support\Collection;
 
 class SpaceHandler
 {
