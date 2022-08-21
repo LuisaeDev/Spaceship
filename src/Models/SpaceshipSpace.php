@@ -32,18 +32,10 @@ class SpaceshipSpace extends Model
     {
         return Attribute::make(
             get: function ($value) {
-                if (is_string($value)) {
-                    return json_decode($value, true);
-                } else {
-                    return null;
-                }
+                return unserialize($value);
             },
             set: function ($value) {
-                if (is_array($value)) {
-                    return json_encode($value);
-                } else {
-                    return $value;
-                }
+                return serialize($value);
             }
         );
     }
