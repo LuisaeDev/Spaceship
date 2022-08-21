@@ -2,17 +2,16 @@
 
 namespace LuisaeDev\Spaceship\Traits;
 
+use Illuminate\Support\Collection;
 use LuisaeDev\Spaceship\AccessHandler;
 use LuisaeDev\Spaceship\Exceptions\SpaceshipException;
 use LuisaeDev\Spaceship\Facades\Spaceship;
+use LuisaeDev\Spaceship\Models\SpaceshipAccess;
 use LuisaeDev\Spaceship\RoleHandler;
 use LuisaeDev\Spaceship\SpaceHandler;
-use LuisaeDev\Spaceship\Models\SpaceshipAccess;
-use Illuminate\Support\Collection;
 
 trait HasSpaces
 {
-
     public function accesses()
     {
         return $this->hasMany(SpaceshipAccess::class);
